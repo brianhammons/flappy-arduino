@@ -1,10 +1,13 @@
 from itertools import cycle
 import random
 import sys
+import serial #Import Serial Library
 
 import pygame
 from pygame.locals import *
 
+# Pull in Arduino Serial Port Messages
+arduinoSerialData = serial.Serial('/dev/cu.usbmodem14611',9600)
 
 FPS = 30
 SCREENWIDTH  = 288
@@ -213,18 +216,29 @@ def mainGame(movementInfo):
         {'x': SCREENWIDTH + 200 + (SCREENWIDTH / 2), 'y': newPipe2[1]['y']},
     ]
 
-    pipeVelX = -4
+    pipeVelX = -5
 
     # player velocity, max velocity, downward accleration, accleration on flap
-    playerVelY    =  -9   # player's velocity along Y, default same as playerFlapped
+    playerVelY    =  -8   # player's velocity along Y, default same as playerFlapped
     playerMaxVelY =  10   # max vel along Y, max descend speed
     playerMinVelY =  -8   # min vel along Y, max ascend speed
     playerAccY    =   1   # players downward accleration
-    playerFlapAcc =  -9   # players speed on flapping
+    playerFlapAcc =  -8   # players speed on flapping
     playerFlapped = False # True when player flaps
 
 
     while True:
+        if (arduinoSerialData.inWaiting()>0):
+            proximity = int(arduinoSerialData.readline())
+            if proximity == 199:
+                print "Distance is out of range."
+            else: 
+                print "Distance is " + str(proximity) + "cm"
+            if proximity > 0 and proximity < 10:
+                if playery > -2 * IMAGES['player'][0].get_height():
+                    playerVelY = playerFlapAcc
+                    playerFlapped = True
+                    SOUNDS['wing'].play()
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 pygame.quit()
