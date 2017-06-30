@@ -34,5 +34,5 @@ void loop() {
   else {
     Serial.println(distance);
   }
-  delay(200);
+  delay(100);
 }

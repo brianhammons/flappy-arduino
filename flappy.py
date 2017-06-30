@@ -219,10 +219,10 @@ def mainGame(movementInfo):
     pipeVelX = -5
 
     # player velocity, max velocity, downward accleration, accleration on flap
-    playerVelY    =  -8   # player's velocity along Y, default same as playerFlapped
+    playerVelY    =  -9   # player's velocity along Y, default same as playerFlapped
     playerMaxVelY =  10   # max vel along Y, max descend speed
     playerMinVelY =  -8   # min vel along Y, max ascend speed
-    playerAccY    =   1   # players downward accleration
+    playerAccY    =   .75  # players downward accleration
     playerFlapAcc =  -8   # players speed on flapping
     playerFlapped = False # True when player flaps
 
